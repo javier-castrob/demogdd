@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0"
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="api"
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+                <EntitySet Name="Approver" EntityType="api.Approver"/>
+                <EntitySet Name="Plant" EntityType="api.Plant"/>
+                <EntitySet Name="User" EntityType="api.User"/>
+                <EntitySet Name="User_Approver" EntityType="api.User_Approver"/>
+                <EntitySet Name="User_Plant" EntityType="api.User_Plant"/>
+                <AssociationSet Name="User_Approver_userSAP" Association="api.User_Approver_userSAP">
+                    <End Role="User_Approver" EntitySet="User_Approver"/>
+                    <End Role="User" EntitySet="User"/>
+                </AssociationSet>
+                <AssociationSet Name="User_Approver_approver" Association="api.User_Approver_approver">
+                    <End Role="User_Approver" EntitySet="User_Approver"/>
+                    <End Role="Approver" EntitySet="Approver"/>
+                </AssociationSet>
+                <AssociationSet Name="User_Plant_userSAP" Association="api.User_Plant_userSAP">
+                    <End Role="User_Plant" EntitySet="User_Plant"/>
+                    <End Role="User" EntitySet="User"/>
+                </AssociationSet>
+                <AssociationSet Name="User_Plant_plant" Association="api.User_Plant_plant">
+                    <End Role="User_Plant" EntitySet="User_Plant"/>
+                    <End Role="Plant" EntitySet="Plant"/>
+                </AssociationSet>
+            </EntityContainer>
+            <EntityType Name="Approver">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" MaxLength="15" Nullable="false"/>
+                <Property Name="email" Type="Edm.String" MaxLength="100"/>
+                <NavigationProperty Name="userSAP" Relationship="api.User_Approver_approver" FromRole="Approver" ToRole="User_Approver"/>
+            </EntityType>
+            <EntityType Name="Plant">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" MaxLength="4" Nullable="false"/>
+                <Property Name="name" Type="Edm.String" MaxLength="30"/>
+                <NavigationProperty Name="userSAP" Relationship="api.User_Plant_plant" FromRole="Plant" ToRole="User_Plant"/>
+            </EntityType>
+            <EntityType Name="User">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="email" Type="Edm.String" MaxLength="50"/>
+                <Property Name="enabled" Type="Edm.Boolean"/>
+                <NavigationProperty Name="plant" Relationship="api.User_Plant_userSAP" FromRole="User" ToRole="User_Plant"/>
+                <NavigationProperty Name="approver" Relationship="api.User_Approver_userSAP" FromRole="User" ToRole="User_Approver"/>
+            </EntityType>
+            <EntityType Name="User_Approver">
+                <Key>
+                    <PropertyRef Name="userSAP_ID"/>
+                    <PropertyRef Name="approver_ID"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <NavigationProperty Name="userSAP" Relationship="api.User_Approver_userSAP" FromRole="User_Approver" ToRole="User"/>
+                <Property Name="userSAP_ID" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="approver" Relationship="api.User_Approver_approver" FromRole="User_Approver" ToRole="Approver"/>
+                <Property Name="approver_ID" Type="Edm.String" MaxLength="15" Nullable="false"/>
+            </EntityType>
+            <EntityType Name="User_Plant">
+                <Key>
+                    <PropertyRef Name="userSAP_ID"/>
+                    <PropertyRef Name="plant_ID"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <NavigationProperty Name="userSAP" Relationship="api.User_Plant_userSAP" FromRole="User_Plant" ToRole="User"/>
+                <Property Name="userSAP_ID" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="plant" Relationship="api.User_Plant_plant" FromRole="User_Plant" ToRole="Plant"/>
+                <Property Name="plant_ID" Type="Edm.String" MaxLength="4" Nullable="false"/>
+            </EntityType>
+            <Association Name="User_Approver_userSAP">
+                <End Role="User_Approver" Type="api.User_Approver" Multiplicity="*"/>
+                <End Role="User" Type="api.User" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="User">
+                        <PropertyRef Name="ID"/>
+                    </Principal>
+                    <Dependent Role="User_Approver">
+                        <PropertyRef Name="userSAP_ID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="User_Approver_approver">
+                <End Role="User_Approver" Type="api.User_Approver" Multiplicity="*"/>
+                <End Role="Approver" Type="api.Approver" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="Approver">
+                        <PropertyRef Name="ID"/>
+                    </Principal>
+                    <Dependent Role="User_Approver">
+                        <PropertyRef Name="approver_ID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="User_Plant_userSAP">
+                <End Role="User_Plant" Type="api.User_Plant" Multiplicity="*"/>
+                <End Role="User" Type="api.User" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="User">
+                        <PropertyRef Name="ID"/>
+                    </Principal>
+                    <Dependent Role="User_Plant">
+                        <PropertyRef Name="userSAP_ID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="User_Plant_plant">
+                <End Role="User_Plant" Type="api.User_Plant" Multiplicity="*"/>
+                <End Role="Plant" Type="api.Plant" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="Plant">
+                        <PropertyRef Name="ID"/>
+                    </Principal>
+                    <Dependent Role="User_Plant">
+                        <PropertyRef Name="plant_ID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Annotations Target="api.User/createdAt"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Created On"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+            <Annotations Target="api.User/createdBy"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Created By"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+            <Annotations Target="api.User/modifiedAt"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Changed On"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+            <Annotations Target="api.User/modifiedBy"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Changed By"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+            <Annotations Target="api.User_Approver/createdAt"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Created On"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+            <Annotations Target="api.User_Approver/createdBy"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Created By"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+            <Annotations Target="api.User_Approver/modifiedAt"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Changed On"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+            <Annotations Target="api.User_Approver/modifiedBy"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Changed By"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+            <Annotations Target="api.User_Plant/createdAt"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Created On"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+            <Annotations Target="api.User_Plant/createdBy"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Created By"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+            <Annotations Target="api.User_Plant/modifiedAt"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Changed On"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+            <Annotations Target="api.User_Plant/modifiedBy"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Changed By"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

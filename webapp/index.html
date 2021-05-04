@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Cargo Manifest Preparation</title>
+        <script
+            id="sap-ui-bootstrap"
+            src="resources/sap-ui-core.js"
+            data-sap-ui-theme="sap_belize_plus"
+            data-sap-ui-resourceroots='{"gdd.gdd": "./"}'
+            data-sap-ui-compatVersion="edge"
+            data-sap-ui-oninit="module:sap/ui/core/ComponentSupport"
+            data-sap-ui-async="true"
+			data-sap-ui-preload="async"
+            data-sap-ui-frameOptions="trusted"
+        ></script>
+        <script
+         src="https://cdn.cai.tools.sap/webclient/bootstrap.js"
+         data-channel-id="5d433461-fab3-4fa7-9122-987d196eea28"
+         data-token="f984bed3dd9137347e742709b8a0dae2"
+         data-expander-type="CAI"
+         data-expander-preferences="JTdCJTIyYWNjZW50Q29sb3IlMjIlM0ElMjIlMjMzNTRhNWYlMjIlMkMlMjJiYWNrZ3JvdW5kQ29sb3IlMjIlM0ElMjIlMjNmYWZhZmElMjIlMkMlMjJjb21wbGVtZW50YXJ5Q29sb3IlMjIlM0ElMjIlMjNmZmZmZmYlMjIlMkMlMjJleHBhbmRlckxvZ28lMjIlM0ElMjJodHRwcyUzQSUyRiUyRnBhdWxhY2hhdGJvdC1vM241MDBhdGV6LmRpc3BhdGNoZXIuYXAxLmhhbmEub25kZW1hbmQuY29tJTJGaW1hZ2UlMkZwYXVsYV9sb2dvX3doaXRlLnBuZyUyMiUyQyUyMmV4cGFuZGVyVGl0bGUlMjIlM0ElMjJDbGljayUyMG9uJTIwbWUhJTIyJTJDJTIyb25ib2FyZGluZ01lc3NhZ2UlMjIlM0ElMjJDaGF0JTIwd2l0aCUyMG1lISUyMiUyQyUyMm9wZW5pbmdUeXBlJTIyJTNBJTIybWVtb3J5JTIyJTJDJTIydGhlbWUlMjIlM0ElMjJDVVNUT00lMjIlN0Q="
+         id="cai-webclient-custom">
+                                </script>
+                                
+                                <script>
+            window.sapcai = {};
+            window.sapcai.webclientBridge = {};
+            window.sapcai.webclientBridge = {
+                getMemory: () => {
+                  const memory = { 
+                      <<fieldNameHere>>: <<fieldNameHere>>
+                  }
+                  return { memory, merge: true }
+                }
+            } 
+                                </script>
+
+    </head>
+    <body class="sapUiBody">
+        <div
+            data-sap-ui-component
+            data-name="gdd.gdd"
+            data-id="container"
+            data-settings='{"id" : "gdd"}'
+        ></div>
+    </body>
+
+
+</html>

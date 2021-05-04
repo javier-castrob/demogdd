@@ -1,0 +1,246 @@
+<mvc:View
+    controllerName="gdd.gdd.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+>
+    <Page title="{i18n>title}">
+        <content>
+            <IconTabBar       
+                id="idIconTabBarMulti"
+                class="sapUiResponsiveContentPadding"
+                expandable="false"
+                selectedKey="gd"
+                select='unselectGD'>
+                <items>
+                    <IconTabFilter icon="sap-icon://supplier" key="gd" class="" >
+                        <content>
+                            <SplitApp
+                                id="SplitAppDemo"
+                                mode="ShowHideMode"
+                                class="sapUiLargeMarginBottom"
+                                initialDetail="detail"
+                                initialMaster="master">
+                                <detailPages>
+                                    <Page id="pageDetail" title="{i18n>titleDetailGuide} {guideModel>/Numero_guia}" >
+                                        <headerContent>    
+                                            <Button icon="sap-icon://add" type="Accept" text="Add Items" press="add"/>
+                                        </headerContent>
+                                        <Table id="idTableDetailGuide" updateFinished="validateSelected" mode="MultiSelect" items="{guideModel>/detail/}" noDataText="{i18n>noDetailGuide}" fixedLayout="false" alternateRowColors="true">
+                                            <columns>
+                                                <Column >
+                                                    <Text text="{i18n>item}" />
+                                                </Column>
+                                                <Column >
+                                                    <Text text="{i18n>cod_material}" />
+                                                </Column>
+                                                <Column >
+                                                    <Text text="{i18n>descrip}" />
+                                                </Column>
+                                                <Column >
+                                                    <Text text="{i18n>cant}" />
+                                                </Column>
+                                                <Column >
+                                                    <Text text="{i18n>precio}" />
+                                                </Column>
+                                                <Column >
+                                                    <Text text="{i18n>ceco}" />
+                                                </Column>
+                                            </columns>
+                                            <items>
+                                                <ColumnListItem id="cell" selected="{guideModel>selected}">
+                                                    <cells>
+                                                        <Text text="{guideModel>Item}"/>
+                                                        <Text text="{guideModel>Codigo_materia}"/>
+                                                        <Text text="{guideModel>Descripcion}"/>
+                                                        <ObjectNumber
+                                                            number="{path:'guideModel>Cantidad'}"
+                                                            unit="{guideModel>UM}" />
+                                                        <ObjectNumber
+                                                            number="{path:'guideModel>Precio'}"
+                                                            unit="{guideModel>Moneda}" />
+                                                        <Text text="{guideModel>Ceco}"></Text>
+                                                    </cells>
+                                                </ColumnListItem>
+                                            </items>
+                                        </Table>
+                                    </Page>
+                                </detailPages>
+                                <masterPages>
+                                    <Page id="page" title="{i18n>titleGD}">
+                                        <subHeader>
+                                            <OverflowToolbar>
+                                                <SearchField width="80%" placeholder="{i18n>search}" liveChange="onSearch"/>
+                                                <Button icon="sap-icon://filter"></Button>                     
+                                            </OverflowToolbar>
+                                        </subHeader>
+                                        <content>
+                                            <List id="idListGD" class="sapUiLargeMarginBottom" items="{path:'GD>/', sorter: {path:'Proveedor'}}" mode="SingleSelect" selectionChange="selectGD">
+                                                <items>
+                                                    <StandardListItem title="{GD>Proveedor}" description="{GD>Numero_guia}" info="{GD>Fecha}"></StandardListItem>
+                                                </items>
+                                            </List>
+                                        </content>
+                                    </Page>
+                                </masterPages>
+                                
+                            </SplitApp>
+                        </content>
+                    </IconTabFilter>
+                    <IconTabSeparator icon="sap-icon://open-command-field" />
+                    <IconTabFilter
+                        icon="sap-icon://product"
+                        key="pallet"
+                        count="{Info>/countItems}">
+                        <!-- por completar title -->
+                        <Page title="Pallet" >
+                            <headerContent>    
+                                <Button icon="sap-icon://add-product" id="idButtonCreatePallet" press="createPallet" type="Accept" text="Create Pallet"/>
+                                <Button icon="sap-icon://delete" id="idButtonDelete" press="delete" type="Reject" text="Enable Delete"/>
+                            </headerContent>
+                            <content>
+                                <Table id="idTableItems" class="sapUiLargeMarginBottom" noDataText="No items added" items="{palletModel>/items/}">
+                                    <columns>
+                                        <Column >
+                                            <Text text="{i18n>deliveryOrders}" />
+                                        </Column>
+                                        <Column >
+                                            <Text text="{i18n>proveedor}" />
+                                        </Column>
+                                        <Column >
+                                            <Text text="{i18n>fecha}" />
+                                        </Column>
+                                        <Column >
+                                            <Text text="{i18n>item}" />
+                                        </Column>
+                                        <Column >
+                                            <Text text="{i18n>descrip}" />
+                                        </Column>
+                                        <Column >
+                                            <Text text="{i18n>cant}" />
+                                        </Column>
+                                        <Column >
+                                            <Text text="{i18n>precio}" />
+                                        </Column>
+                                        <Column >
+                                            <Text text="{i18n>ceco}" />
+                                        </Column>
+                                        <Column id="idColumnAction" visible="false"> 
+                                            <Text text="{i18n>action}" />
+                                        </Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem>
+                                            <cells>
+                                                <Text text="{palletModel>deliveryOrders}"/>
+                                                <Text text="{palletModel>proveedor}"/>
+                                                <Text text="{palletModel>fecha}"/>
+                                                <Text text="{palletModel>Item}"/>
+                                                <Text text="{palletModel>Descripcion}"/>
+                                                <ObjectNumber
+                                                    number="{path:'palletModel>Cantidad'}"
+                                                    unit="{palletModel>UM}" />
+                                                <ObjectNumber
+                                                    number="{path:'palletModel>Precio'}"
+                                                    unit="{palletModel>Moneda}" />
+                                                <Text text="{palletModel>Ceco}"></Text>
+                                                <Button icon="sap-icon://less" press="deleteGD" type="Reject"></Button>
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                            </content>
+                        </Page>
+                    </IconTabFilter>
+                    <IconTabSeparator icon="sap-icon://open-command-field" />
+                    <IconTabFilter
+                        icon="sap-icon://shipping-status"
+                        key="order"
+                        count="{Info>/countPallets}"
+                        >
+                        <Page id="orderPage" title="{i18n>order}" >
+                            <headerContent>    
+                                <Text class="sapUiLargeMarginEnd" text="Total Weight = {Info>/totalWeight} TON"/>
+                            </headerContent>
+                            <content>
+                                <List items="{orderModel>/pallets}" updateFinished="refresh">
+                                    <items>
+                                        <CustomListItem >
+                                            <Panel expandable="true" expanded="false">
+                                                <headerToolbar>
+                                                    <OverflowToolbar>
+                                                        <Title text="Pallet {orderModel>codPallet}"/>
+                                                        <ToolbarSpacer />
+                                                        <Text text="Weight: {orderModel>weight} {orderModel>um} -" />
+                                                        <Text text="Count Items: {orderModel>countItems}" />                      
+                                                    </OverflowToolbar>
+                                                </headerToolbar>
+                                                <Table items="{orderModel>detail/}"  noDataText="No se han cargado datos" fixedLayout="false" alternateRowColors="true">
+                                                    <columns>
+                                                        <Column >
+                                                            <Text text="{i18n>deliveryOrders}" />
+                                                        </Column>
+                                                        <Column >
+                                                            <Text text="{i18n>proveedor}" />
+                                                        </Column>
+                                                        <Column >
+                                                            <Text text="{i18n>fecha}" />
+                                                        </Column>
+                                                        <Column >
+                                                            <Text text="{i18n>item}" />
+                                                        </Column>
+                                                        <Column >
+                                                            <Text text="{i18n>cod_material}" />
+                                                        </Column>
+                                                        <Column >
+                                                            <Text text="{i18n>descrip}" />
+                                                        </Column>
+                                                        <Column >
+                                                            <Text text="{i18n>cant}" />
+                                                        </Column>
+                                                        <Column >
+                                                            <Text text="{i18n>precio}" />
+                                                        </Column>
+                                                        <Column >
+                                                            <Text text="{i18n>ceco}" />
+                                                        </Column>
+                                                    </columns>
+                                                    <items>
+                                                        <ColumnListItem >
+                                                            <cells>
+                                                                <Text text="{orderModel>deliveryOrders}"/>
+                                                                <Text text="{orderModel>proveedor}"/>
+                                                                <Text text="{orderModel>fecha}"/>
+                                                                <Text text="{orderModel>Item}"/>
+                                                                <Text text="{orderModel>Codigo_materia}"/>
+                                                                <Text text="{orderModel>Descripcion}"/>
+                                                                <ObjectNumber
+                                                                    number="{path:'orderModel>Cantidad'}"
+                                                                    unit="{orderModel>UM}" />
+                                                                <ObjectNumber
+                                                                    number="{path:'orderModel>Precio'}"
+                                                                    unit="{orderModel>Moneda}" />
+                                                                <Text text="{orderModel>Ceco}"></Text>
+                                                            </cells>
+                                                        </ColumnListItem>
+                                                    </items>
+                                                </Table>
+                                            </Panel>
+                                        </CustomListItem>
+                                    </items>
+                                </List>
+                            </content>
+                            <footer>
+                                <OverflowToolbar class="sapUiLargeMarginBottom">
+                                    <ToolbarSpacer/>
+                                    <Button icon="sap-icon://complete" press="createOrder" type="Accept" text="{i18n>complete}"/>
+                                </OverflowToolbar>
+                            </footer>
+                        </Page>
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </content>
+    </Page>
+</mvc:View>
